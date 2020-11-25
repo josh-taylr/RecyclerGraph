@@ -11,6 +11,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.allOf
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -49,6 +50,21 @@ class ExampleInstrumentedTest {
         onView(withId(R.id.recyclerView))
             .perform(RecyclerViewActions.scrollToHolder(withLabel("m")))
 
-        onView(withText("13")).check(matches(isDisplayed()))
+        onView(withText("13 / 26")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun updateGraphScale() {
+        val scenario = launchActivity<MainActivity>()
+
+        onView(withChild(allOf(withId(R.id.label), withText("a"))))
+            .check(matches(withChild(allOf(withId(R.id.value), withText("1 / 26")))))
+
+        scenario.onActivity {
+            it.setGraphScale(30)
+        }
+
+        onView(withChild(allOf(withId(R.id.label), withText("a"))))
+            .check(matches(withChild(allOf(withId(R.id.value), withText("1 / 30")))))
     }
 }
