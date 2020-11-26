@@ -1,9 +1,14 @@
 package com.github.joshtaylr.recyclergraph
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -49,7 +54,7 @@ class SimpleDataAdapter(var scale: Int) : ListAdapter<SimpleData, SimpleDataAdap
         ViewHolder.newInstance(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.scale = scale
+        holder.updateScale(scale)
         holder.bind(getItem(position))
     }
 
@@ -59,25 +64,65 @@ class SimpleDataAdapter(var scale: Int) : ListAdapter<SimpleData, SimpleDataAdap
     }
 
     class ViewHolder private constructor(
-        bindings: SimpleListItemBinding
-    ) : RecyclerView.ViewHolder(bindings.root) {
-
-        val label = bindings.label
-        val value = bindings.value
-        var scale = 0
+        val graphItem: SimpleGraphItem
+    ) : RecyclerView.ViewHolder(graphItem) {
 
         fun bind(data: SimpleData) {
-            label.text = data.x
-            value.text = "${data.y} / $scale"
+            graphItem.labelText = data.x
+            graphItem.value = data.y
+        }
+
+        fun updateScale(value: Int) {
+            graphItem.scale = value
         }
 
         companion object {
             fun newInstance(parent: ViewGroup) = ViewHolder(
-                SimpleListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                SimpleGraphItem(parent.context).apply {
+                    layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                }
             )
         }
     }
 }
+
+interface GraphItem {
+    val scale: Int
+}
+
+class SimpleGraphItem : ConstraintLayout, GraphItem {
+
+    var labelText: CharSequence
+        get() = bindings.label.text.toString()
+        set(value) {
+            bindings.label.text = value
+        }
+
+    var value: Int
+        get() = bindings.value.text.toString().toIntOrNull() ?: 0
+        set(value) {
+            bindings.value.text = "$value"
+        }
+
+    override var scale: Int = 0
+
+    private val bindings by lazy {
+        SimpleListItemBinding.bind(this)
+    }
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    init {
+        LayoutInflater.from(context).inflate(R.layout.simple_list_item, this, true)
+    }
+}
+
 
 data class SimpleData(val x: String, val y: Int) {
     companion object {

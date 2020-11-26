@@ -9,7 +9,6 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.allOf
 import org.junit.Test
@@ -44,27 +43,33 @@ class ExampleInstrumentedTest {
     }
 
     @Test
+    fun showItemValue() {
+        launchActivity<MainActivity>()
+
+        onView(allOf(withChild(withText("c")), withChild(withText("3"))))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
     fun scrollToItemOutOfView() {
         launchActivity<MainActivity>()
 
         onView(withId(R.id.recyclerView))
             .perform(RecyclerViewActions.scrollToHolder(withLabel("m")))
 
-        onView(withText("13 / 26")).check(matches(isDisplayed()))
+        onView(withText("13")).check(matches(isDisplayed()))
     }
 
     @Test
     fun updateGraphScale() {
         val scenario = launchActivity<MainActivity>()
 
-        onView(withChild(allOf(withId(R.id.label), withText("a"))))
-            .check(matches(withChild(allOf(withId(R.id.value), withText("1 / 26")))))
+        onView(withItemLabel("a")).check(matches(withItemScale(26)))
 
         scenario.onActivity {
             it.setGraphScale(30)
         }
 
-        onView(withChild(allOf(withId(R.id.label), withText("a"))))
-            .check(matches(withChild(allOf(withId(R.id.value), withText("1 / 30")))))
+        onView(withItemLabel("a")).check(matches(withItemScale(30)))
     }
 }
