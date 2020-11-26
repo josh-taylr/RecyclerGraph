@@ -1,20 +1,15 @@
 package com.github.joshtaylr.recyclergraph
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.joshtaylr.recyclergraph.databinding.ActivityMainBinding
-import com.github.joshtaylr.recyclergraph.databinding.SimpleListItemBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        simpleDataAdapter.submitList(SimpleData.create())
+        simpleDataAdapter.submitList(SimpleData.create(26))
         binding.recyclerView.adapter = simpleDataAdapter
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -86,50 +81,12 @@ class SimpleDataAdapter(var scale: Int) : ListAdapter<SimpleData, SimpleDataAdap
     }
 }
 
-interface GraphItem {
-    val scale: Int
-}
-
-class SimpleGraphItem : ConstraintLayout, GraphItem {
-
-    var labelText: CharSequence
-        get() = bindings.label.text.toString()
-        set(value) {
-            bindings.label.text = value
-        }
-
-    var value: Int
-        get() = bindings.value.text.toString().toIntOrNull() ?: 0
-        set(value) {
-            bindings.value.text = "$value"
-        }
-
-    override var scale: Int = 0
-
-    private val bindings by lazy {
-        SimpleListItemBinding.bind(this)
-    }
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
-    init {
-        LayoutInflater.from(context).inflate(R.layout.simple_list_item, this, true)
-    }
-}
-
-
 data class SimpleData(val x: String, val y: Int) {
     companion object {
 
-        fun create() = createSequence().take(26).toList()
+        fun create(n: Int) = generateSequence().take(n).toList()
 
-        fun createSequence() = sequence {
+        private fun generateSequence() = sequence {
             var i = 0
             while (i < 26) {
                 yield(SimpleData("${'a' + i}", ++i))
