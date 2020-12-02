@@ -1,6 +1,8 @@
 package com.github.joshtaylr.recyclergraph
 
+import android.util.Log
 import android.view.View
+import androidx.annotation.Px
 import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -51,4 +53,24 @@ class WithItemScaleMatcher(
     }
 
     override fun matchesSafely(item: SimpleGraphItem) = (item as GraphItem).scale == value
+}
+
+fun withGraphItemPixelMeasurement(@Px size: Int): Matcher<View> {
+    return WithGraphItemPixelMeasurementMatcher(size)
+}
+
+class WithGraphItemPixelMeasurementMatcher(
+    @Px private val size: Int
+) : BoundedMatcher<View, SimpleGraphItem>(SimpleGraphItem::class.java) {
+
+    override fun describeTo(description: Description) {
+        description.appendText("with graph item pixel measurement ")
+        description.appendValue(size)
+    }
+
+    override fun matchesSafely(item: SimpleGraphItem): Boolean {
+        val pixelMeasurement = item.pixelMeasurement
+        Log.d("TestTest", "Measurement: $pixelMeasurement")
+        return pixelMeasurement == size
+    }
 }

@@ -10,6 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Matchers.allOf
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,7 +37,7 @@ class ExampleInstrumentedTest {
             )
         )
 
-        launchActivity<MainActivity>(intent)
+        launchActivity<MainActivity>(intent, bundleOf())
 
         onView(withText("z")).check(matches(isDisplayed()))
         onView(withText("a")).check(doesNotExist())
@@ -71,5 +72,24 @@ class ExampleInstrumentedTest {
         }
 
         onView(withItemLabel("a")).check(matches(withItemScale(30)))
+    }
+
+    @Test
+    fun drawSmallBarToScale() {
+        launchActivity<MainActivity>()
+
+        val density = InstrumentationRegistry.getInstrumentation().context.resources.displayMetrics.density
+        onView(withItemLabel("a")).check(matches(withGraphItemPixelMeasurement((1f / 26 * 200 * density).toInt())))
+    }
+
+    @Test
+    fun drawLargeBarToScale() {
+        launchActivity<MainActivity>()
+
+        onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToHolder(withLabel("z")))
+
+        val density = InstrumentationRegistry.getInstrumentation().context.resources.displayMetrics.density
+
+        onView(withItemLabel("z")).check(matches(withGraphItemPixelMeasurement((200 * density).toInt())))
     }
 }
