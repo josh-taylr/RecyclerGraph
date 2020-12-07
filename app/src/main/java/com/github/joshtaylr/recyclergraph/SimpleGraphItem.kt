@@ -12,9 +12,8 @@ import kotlin.math.nextDown
 
 class SimpleGraphItem : ConstraintLayout, GraphItem {
 
-    @get:Px
-    val pixelMeasurement: Int
-        get() = bindings.barView.measuredWidth
+    val barPixelDimensions: Pair<Int, Int>
+        get() = bindings.barView.measuredWidth to bindings.barView.measuredHeight
 
     var labelText: CharSequence
         get() = bindings.label.text.toString()

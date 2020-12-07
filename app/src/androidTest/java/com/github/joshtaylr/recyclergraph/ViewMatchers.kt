@@ -55,22 +55,24 @@ class WithItemScaleMatcher(
     override fun matchesSafely(item: SimpleGraphItem) = (item as GraphItem).scale == value
 }
 
-fun withGraphItemPixelMeasurement(@Px size: Int): Matcher<View> {
-    return WithGraphItemPixelMeasurementMatcher(size)
+fun withGraphItemPixelDimensions(@Px width: Int? = null, @Px height: Int? = null): Matcher<View> {
+    return WithGraphItemBarDimensionsMatcher(width, height)
 }
 
-class WithGraphItemPixelMeasurementMatcher(
-    @Px private val size: Int
+class WithGraphItemBarDimensionsMatcher(
+    @Px private val width: Int?,
+    @Px private val height: Int?
 ) : BoundedMatcher<View, SimpleGraphItem>(SimpleGraphItem::class.java) {
 
     override fun describeTo(description: Description) {
-        description.appendText("with graph item pixel measurement ")
-        description.appendValue(size)
+        description.appendText("with graph item pixel width ")
+        description.appendValue(width ?: "Any")
+        description.appendText(" height ")
+        description.appendValue(height ?: "Any")
     }
 
     override fun matchesSafely(item: SimpleGraphItem): Boolean {
-        val pixelMeasurement = item.pixelMeasurement
-        Log.d("TestTest", "Measurement: $pixelMeasurement")
-        return pixelMeasurement == size
+        val dimensions = item.barPixelDimensions
+        return (width == null || width == dimensions.first) && (height == null || height == dimensions.second)
     }
 }

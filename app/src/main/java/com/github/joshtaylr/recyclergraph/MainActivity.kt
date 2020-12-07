@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val simpleDataAdapter by lazy {
-        SimpleDataAdapter(intent.getIntExtra(GraphScale, 26))
+        SimpleDataAdapter(intent.getIntExtra(GraphScale, 20))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        simpleDataAdapter.submitList(SimpleData.create(26))
+        simpleDataAdapter.submitList(SimpleData.create(21))
         binding.recyclerView.adapter = simpleDataAdapter
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -89,7 +89,8 @@ data class SimpleData(val x: String, val y: Int) {
         private fun generateSequence() = sequence {
             var i = 0
             while (i < 26) {
-                yield(SimpleData("${'a' + i}", ++i))
+                yield(SimpleData("${'a' + i}", i))
+                i++
             }
         }
 
