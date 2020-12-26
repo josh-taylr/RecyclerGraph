@@ -32,7 +32,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun stacksItemsFromStart() {
-        launchActivity<MainActivity>()
+        launchActivity<VerticalBarGraphActivity>()
 
         onView(withText("a")).check(matches(isDisplayed()))
         onView(withText("z")).check(doesNotExist())
@@ -41,15 +41,15 @@ class ExampleInstrumentedTest {
     @Test
     fun stacksItemsFromEnd() {
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), MainActivity::class.java)
+        val intent = Intent(ApplicationProvider.getApplicationContext(), VerticalBarGraphActivity::class.java)
 
         intent.putExtras(
             bundleOf(
-                MainActivity.StackGraphFromEnd to true
+                VerticalBarGraphActivity.StackGraphFromEnd to true
             )
         )
 
-        launchActivity<MainActivity>(intent, bundleOf())
+        launchActivity<VerticalBarGraphActivity>(intent, bundleOf())
 
         onView(withText("u")).check(matches(isDisplayed()))
         onView(withText("a")).check(doesNotExist())
@@ -57,7 +57,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun showItemValue() {
-        launchActivity<MainActivity>()
+        launchActivity<VerticalBarGraphActivity>()
 
         onView(allOf(withChild(withText("c")), withChild(withText("2"))))
             .check(matches(isDisplayed()))
@@ -65,7 +65,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun scrollToItemOutOfView() {
-        launchActivity<MainActivity>()
+        launchActivity<VerticalBarGraphActivity>()
 
         onView(withId(R.id.recyclerView))
             .perform(RecyclerViewActions.scrollToHolder(withLabel("m")))
@@ -75,7 +75,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun updateGraphScale() {
-        val scenario = launchActivity<MainActivity>()
+        val scenario = launchActivity<VerticalBarGraphActivity>()
 
         onView(withItemLabel("a")).check(matches(withItemScale(20)))
 
@@ -88,7 +88,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun drawZeroWithCorrectDimensions() {
-        launchActivity<MainActivity>()
+        launchActivity<VerticalBarGraphActivity>()
 
         onView(withItemLabel("a")).check(matches(withGraphItemPixelDimensions(
             width = 0,
@@ -98,7 +98,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun drawSmallBarToScale() {
-        launchActivity<MainActivity>()
+        launchActivity<VerticalBarGraphActivity>()
 
         onView(withItemLabel("b")).check(matches(withGraphItemPixelDimensions(
             width = (10 * density).toInt(),
@@ -108,7 +108,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun drawLargeBarToScale() {
-        launchActivity<MainActivity>()
+        launchActivity<VerticalBarGraphActivity>()
 
         onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToHolder(withLabel("u")))
 

@@ -1,14 +1,15 @@
-package com.github.joshtaylr.recyclergraph
+package com.github.joshtaylr.recyclergraph.items
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 
-abstract class AbstractGraphItem : ConstraintLayout, GraphItem {
+abstract class AbstractBarGraphItem : ConstraintLayout, GraphItem {
 
     abstract val barPixelDimensions: Pair<Int, Int>
     abstract var labelText: CharSequence
     abstract var value: Int
+
     abstract override var scale: Int
 
     constructor(context: Context) : super(context)

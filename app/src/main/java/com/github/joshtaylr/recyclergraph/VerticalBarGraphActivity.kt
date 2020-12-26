@@ -2,19 +2,23 @@ package com.github.joshtaylr.recyclergraph
 
 import android.os.Bundle
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.github.joshtaylr.recyclergraph.data.SimpleData
 import com.github.joshtaylr.recyclergraph.databinding.ActivityMainBinding
+import com.github.joshtaylr.recyclergraph.items.VerticalBarGraphItem
 
-class HorizontalGraphActivity : AppCompatActivity() {
+class VerticalBarGraphActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     private val simpleDataAdapter by lazy {
-        HorizontalDataAdapter(20)
+        VerticalBarGraphAdapter(intent.getIntExtra(GraphScale, 20))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +30,28 @@ class HorizontalGraphActivity : AppCompatActivity() {
         binding.recyclerView.adapter = simpleDataAdapter
 
         val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
-
+        linearLayoutManager.stackFromEnd = intent.getBooleanExtra(StackGraphFromEnd, false)
+        linearLayoutManager.orientation = if (intent.getBooleanExtra(HorizontalGraph, false)) {
+            RecyclerView.HORIZONTAL
+        } else {
+            RecyclerView.VERTICAL
+        }
         binding.recyclerView.layoutManager = linearLayoutManager
+    }
+
+    fun setGraphScale(value: Int) {
+        simpleDataAdapter.scale = value
+        simpleDataAdapter.notifyDataSetChanged()
+    }
+
+    companion object {
+        const val HorizontalGraph: String = "VerticalGraph"
+        const val StackGraphFromEnd = "ReverseGraphLayout"
+        const val GraphScale = "GraphScale"
     }
 }
 
-private class HorizontalDataAdapter(var scale: Int) : ListAdapter<SimpleData, HorizontalDataAdapter.ViewHolder>(DiffCallback) {
+class VerticalBarGraphAdapter(var scale: Int) : ListAdapter<SimpleData, VerticalBarGraphAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder.newInstance(parent)
@@ -48,7 +67,7 @@ private class HorizontalDataAdapter(var scale: Int) : ListAdapter<SimpleData, Ho
     }
 
     class ViewHolder private constructor(
-        val graphItem: HorizontalGraphItem
+        val graphItem: VerticalBarGraphItem
     ) : RecyclerView.ViewHolder(graphItem) {
 
         fun bind(data: SimpleData) {
@@ -62,13 +81,12 @@ private class HorizontalDataAdapter(var scale: Int) : ListAdapter<SimpleData, Ho
 
         companion object {
             fun newInstance(parent: ViewGroup) = ViewHolder(
-                HorizontalGraphItem(parent.context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
+                VerticalBarGraphItem(parent.context).apply {
+                    layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 }
             )
         }
     }
 }
+
+

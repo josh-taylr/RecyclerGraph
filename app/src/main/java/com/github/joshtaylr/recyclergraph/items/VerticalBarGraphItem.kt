@@ -1,16 +1,15 @@
-package com.github.joshtaylr.recyclergraph
+package com.github.joshtaylr.recyclergraph.items
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.github.joshtaylr.recyclergraph.databinding.HorizontalGraphItemBinding
-import com.github.joshtaylr.recyclergraph.databinding.SimpleListItemBinding
+import com.github.joshtaylr.recyclergraph.R
+import com.github.joshtaylr.recyclergraph.databinding.VerticalBarGraphItemBinding
 import kotlin.math.min
 import kotlin.math.nextDown
 
-class HorizontalGraphItem : AbstractGraphItem {
+class VerticalBarGraphItem : AbstractBarGraphItem {
 
     override val barPixelDimensions: Pair<Int, Int>
         get() = bindings.barView.measuredWidth to bindings.barView.measuredHeight
@@ -35,7 +34,7 @@ class HorizontalGraphItem : AbstractGraphItem {
         }
 
     private val bindings by lazy {
-        HorizontalGraphItemBinding.bind(this)
+        VerticalBarGraphItemBinding.bind(this)
     }
 
     constructor(context: Context) : super(context)
@@ -47,16 +46,17 @@ class HorizontalGraphItem : AbstractGraphItem {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.horizontal_graph_item, this, true)
+
+        LayoutInflater.from(context).inflate(R.layout.vertical_bar_graph_item, this, true)
     }
 
     private fun updateBarWidth() {
         ConstraintSet().apply {
-            clone(this@HorizontalGraphItem)
+            clone(this@VerticalBarGraphItem)
             var ratio = value / scale.toFloat()
             ratio = min(1f, ratio)
             ratio = ratio.nextDown()
-            constrainPercentHeight(R.id.barView, ratio)
+            constrainPercentWidth(R.id.barView, ratio)
         }.also {
             it.applyTo(this)
         }

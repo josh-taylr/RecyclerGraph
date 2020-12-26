@@ -1,5 +1,6 @@
 package com.github.joshtaylr.recyclergraph
 
+import com.github.joshtaylr.recyclergraph.data.SimpleData
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test

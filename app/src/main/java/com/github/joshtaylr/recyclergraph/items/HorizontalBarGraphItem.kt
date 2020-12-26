@@ -1,14 +1,15 @@
-package com.github.joshtaylr.recyclergraph
+package com.github.joshtaylr.recyclergraph.items
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintSet
-import com.github.joshtaylr.recyclergraph.databinding.SimpleListItemBinding
+import com.github.joshtaylr.recyclergraph.R
+import com.github.joshtaylr.recyclergraph.databinding.HorizontalBarGraphItemBinding
 import kotlin.math.min
 import kotlin.math.nextDown
 
-class VerticalGraphItem : AbstractGraphItem {
+class HorizontalBarGraphItem : AbstractBarGraphItem {
 
     override val barPixelDimensions: Pair<Int, Int>
         get() = bindings.barView.measuredWidth to bindings.barView.measuredHeight
@@ -33,7 +34,7 @@ class VerticalGraphItem : AbstractGraphItem {
         }
 
     private val bindings by lazy {
-        SimpleListItemBinding.bind(this)
+        HorizontalBarGraphItemBinding.bind(this)
     }
 
     constructor(context: Context) : super(context)
@@ -45,17 +46,16 @@ class VerticalGraphItem : AbstractGraphItem {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
-
-        LayoutInflater.from(context).inflate(R.layout.simple_list_item, this, true)
+        LayoutInflater.from(context).inflate(R.layout.horizontal_bar_graph_item, this, true)
     }
 
     private fun updateBarWidth() {
         ConstraintSet().apply {
-            clone(this@VerticalGraphItem)
+            clone(this@HorizontalBarGraphItem)
             var ratio = value / scale.toFloat()
             ratio = min(1f, ratio)
             ratio = ratio.nextDown()
-            constrainPercentWidth(R.id.barView, ratio)
+            constrainPercentHeight(R.id.barView, ratio)
         }.also {
             it.applyTo(this)
         }
