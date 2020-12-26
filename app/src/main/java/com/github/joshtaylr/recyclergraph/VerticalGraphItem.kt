@@ -3,25 +3,23 @@ package com.github.joshtaylr.recyclergraph
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.annotation.Px
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.github.joshtaylr.recyclergraph.databinding.SimpleListItemBinding
 import kotlin.math.min
 import kotlin.math.nextDown
 
-class SimpleGraphItem : ConstraintLayout, GraphItem {
+class VerticalGraphItem : AbstractGraphItem {
 
-    val barPixelDimensions: Pair<Int, Int>
+    override val barPixelDimensions: Pair<Int, Int>
         get() = bindings.barView.measuredWidth to bindings.barView.measuredHeight
 
-    var labelText: CharSequence
+    override var labelText: CharSequence
         get() = bindings.label.text.toString()
         set(value) {
             bindings.label.text = value
         }
 
-    var value: Int
+    override var value: Int
         get() = bindings.value.text.toString().toIntOrNull() ?: 0
         set(value) {
             bindings.value.text = "$value"
@@ -53,7 +51,7 @@ class SimpleGraphItem : ConstraintLayout, GraphItem {
 
     private fun updateBarWidth() {
         ConstraintSet().apply {
-            clone(this@SimpleGraphItem)
+            clone(this@VerticalGraphItem)
             var ratio = value / scale.toFloat()
             ratio = min(1f, ratio)
             ratio = ratio.nextDown()

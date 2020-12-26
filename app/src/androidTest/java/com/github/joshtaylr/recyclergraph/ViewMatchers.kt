@@ -1,6 +1,5 @@
 package com.github.joshtaylr.recyclergraph
 
-import android.util.Log
 import android.view.View
 import androidx.annotation.Px
 import androidx.test.espresso.matcher.BoundedMatcher
@@ -33,26 +32,26 @@ fun withItemScale(value: Int): Matcher<View> {
 
 class WithItemLabelMatcher(
     private val stringMatcher: Matcher<String>
-) : BoundedMatcher<View, SimpleGraphItem>(SimpleGraphItem::class.java) {
+) : BoundedMatcher<View, AbstractGraphItem>(AbstractGraphItem::class.java) {
 
     override fun describeTo(description: Description) {
         description.appendText("with graph label ")
         stringMatcher.describeTo(description)
     }
 
-    override fun matchesSafely(item: SimpleGraphItem) = stringMatcher.matches(item.labelText)
+    override fun matchesSafely(item: AbstractGraphItem) = stringMatcher.matches(item.labelText)
 }
 
 class WithItemScaleMatcher(
     private val value: Int
-) : BoundedMatcher<View, SimpleGraphItem>(SimpleGraphItem::class.java) {
+) : BoundedMatcher<View, AbstractGraphItem>(AbstractGraphItem::class.java) {
 
     override fun describeTo(description: Description) {
         description.appendText("with graph scale ")
         description.appendValue(value)
     }
 
-    override fun matchesSafely(item: SimpleGraphItem) = (item as GraphItem).scale == value
+    override fun matchesSafely(item: AbstractGraphItem) = (item as GraphItem).scale == value
 }
 
 fun withGraphItemPixelDimensions(@Px width: Int? = null, @Px height: Int? = null): Matcher<View> {
@@ -62,7 +61,7 @@ fun withGraphItemPixelDimensions(@Px width: Int? = null, @Px height: Int? = null
 class WithGraphItemBarDimensionsMatcher(
     @Px private val width: Int?,
     @Px private val height: Int?
-) : BoundedMatcher<View, SimpleGraphItem>(SimpleGraphItem::class.java) {
+) : BoundedMatcher<View, AbstractGraphItem>(AbstractGraphItem::class.java) {
 
     override fun describeTo(description: Description) {
         description.appendText("with graph item pixel width ")
@@ -71,7 +70,7 @@ class WithGraphItemBarDimensionsMatcher(
         description.appendValue(height ?: "Any")
     }
 
-    override fun matchesSafely(item: SimpleGraphItem): Boolean {
+    override fun matchesSafely(item: AbstractGraphItem): Boolean {
         val dimensions = item.barPixelDimensions
         return (width == null || width == dimensions.first) && (height == null || height == dimensions.second)
     }
