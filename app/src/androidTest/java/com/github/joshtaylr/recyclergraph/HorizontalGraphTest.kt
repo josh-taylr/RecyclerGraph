@@ -32,7 +32,7 @@ class HorizontalGraphTest {
     }
 
     @Test
-    fun drawBarOnVerticalGraph() {
+    fun drawVerticalBar() {
         launchActivity<HorizontalGraphActivity>()
 
         Espresso.onView(withItemLabel("b")).check(

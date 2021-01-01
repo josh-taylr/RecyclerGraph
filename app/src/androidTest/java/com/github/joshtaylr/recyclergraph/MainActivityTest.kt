@@ -49,7 +49,7 @@ class ExampleInstrumentedTest {
             )
         )
 
-        launchActivity<VerticalBarGraphActivity>(intent, bundleOf())
+        launchActivity<VerticalBarGraphActivity>(intent)
 
         onView(withText("u")).check(matches(isDisplayed()))
         onView(withText("a")).check(doesNotExist())
@@ -101,7 +101,7 @@ class ExampleInstrumentedTest {
         launchActivity<VerticalBarGraphActivity>()
 
         onView(withItemLabel("b")).check(matches(withGraphItemPixelDimensions(
-            width = (10 * density).toInt(),
+            width = (7.6 * density).toInt(),
             height = (48 * density).toInt()
         )))
     }
@@ -113,7 +113,7 @@ class ExampleInstrumentedTest {
         onView(withId(R.id.recyclerView)).perform(RecyclerViewActions.scrollToHolder(withLabel("u")))
 
         onView(withItemLabel("u")).check(matches(withGraphItemPixelDimensions(
-            width = (200 * density).toInt(),
+            width = (152 * density).toInt(),
             height = (48 * density).toInt()
         )))
     }
