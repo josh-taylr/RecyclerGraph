@@ -6,14 +6,14 @@
     tools:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <View
-        android:id="@+id/barView"
+    <com.github.joshtaylr.recyclergraph.items.VerticalBarGraphItemView
+        android:id="@+id/barItem"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?colorAccent"
         app:layout_constraintTop_toTopOf="@id/label"
+        app:layout_constraintStart_toStartOf="@id/divider"
         app:layout_constraintBottom_toBottomOf="@id/label"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView

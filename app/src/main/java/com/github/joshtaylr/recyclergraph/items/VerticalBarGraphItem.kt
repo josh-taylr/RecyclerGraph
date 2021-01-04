@@ -12,7 +12,7 @@ import kotlin.math.nextDown
 class VerticalBarGraphItem : AbstractBarGraphItem {
 
     override val barPixelDimensions: Pair<Int, Int>
-        get() = bindings.barView.measuredWidth to bindings.barView.measuredHeight
+        get() = bindings.barItem.barWidth to bindings.barItem.barHeight
 
     override var labelText: CharSequence
         get() = bindings.label.text.toString()
@@ -24,13 +24,13 @@ class VerticalBarGraphItem : AbstractBarGraphItem {
         get() = bindings.value.text.toString().toIntOrNull() ?: 0
         set(value) {
             bindings.value.text = "$value"
-            updateBarWidth()
+            bindings.barItem.value = value
         }
 
     override var scale: Int = 0
         set(value) {
             field = value
-            updateBarWidth()
+            bindings.barItem.scale = scale
         }
 
     private val bindings by lazy {
@@ -46,19 +46,6 @@ class VerticalBarGraphItem : AbstractBarGraphItem {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
-
         LayoutInflater.from(context).inflate(R.layout.vertical_bar_graph_item, this, true)
-    }
-
-    private fun updateBarWidth() {
-        ConstraintSet().apply {
-            clone(this@VerticalBarGraphItem)
-            var ratio = value / scale.toFloat()
-            ratio = min(1f, ratio)
-            ratio = ratio.nextDown()
-            constrainPercentWidth(R.id.barView, ratio)
-        }.also {
-            it.applyTo(this)
-        }
     }
 }
