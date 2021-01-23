@@ -3,11 +3,8 @@ package com.github.joshtaylr.recyclergraph.items
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.constraintlayout.widget.ConstraintSet
 import com.github.joshtaylr.recyclergraph.R
 import com.github.joshtaylr.recyclergraph.databinding.VerticalBarGraphItemBinding
-import kotlin.math.min
-import kotlin.math.nextDown
 
 class VerticalBarGraphItem : AbstractBarGraphItem {
 
@@ -21,7 +18,7 @@ class VerticalBarGraphItem : AbstractBarGraphItem {
         }
 
     override var value: Int
-        get() = bindings.value.text.toString().toIntOrNull() ?: 0
+        get() = bindings.barItem.value
         set(value) {
             bindings.value.text = "$value"
             bindings.barItem.value = value
